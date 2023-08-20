@@ -1,3 +1,3 @@
 export default function Page() {
-  return <></>;
+  return <>Welcome to General Date Picker Documents</>;
 }
