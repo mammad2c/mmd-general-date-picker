@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  // This tells ESLint to load the config from the package `custom-code-quality-tools`
+  // This tells ESLint to load the config from the package `eslint-config-custom`
   extends: ["custom"],
   settings: {
     next: {

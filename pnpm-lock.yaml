@@ -11,12 +11,12 @@ importers:
       '@turbo/gen':
         specifier: ^1.9.7
         version: 1.9.7(@types/node@20.5.1)(typescript@5.1.6)
-      custom-code-quality-tools:
-        specifier: workspace:*
-        version: link:packages/custom-code-quality-tools
       eslint:
         specifier: ^7.32.0
         version: 7.32.0
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:packages/eslint-config-custom
       prettier:
         specifier: ^2.5.1
         version: 2.8.8
@@ -36,6 +36,9 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
+      '@next/eslint-plugin-next':
+        specifier: ^13.4.19
+        version: 13.4.19
       '@types/node':
         specifier: ^17.0.12
         version: 17.0.45
@@ -45,9 +48,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.0.7
         version: 18.2.3
-      custom-code-quality-tools:
+      eslint-config-custom:
         specifier: workspace:*
-        version: link:../../packages/custom-code-quality-tools
+        version: link:../../packages/eslint-config-custom
       tsconfig:
         specifier: workspace:*
         version: link:../../packages/tsconfig
@@ -55,8 +58,11 @@ importers:
         specifier: ^4.5.3
         version: 4.9.5
 
-  packages/custom-code-quality-tools:
+  packages/eslint-config-custom:
     dependencies:
+      '@next/eslint-plugin-next':
+        specifier: ^13.4.19
+        version: 13.4.19
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.4.0
         version: 6.4.0(@typescript-eslint/parser@6.4.0)(eslint@8.47.0)(typescript@5.1.6)
@@ -95,9 +101,9 @@ importers:
       '@types/node':
         specifier: ^16.18.11
         version: 16.18.11
-      custom-code-quality-tools:
+      eslint-config-custom:
         specifier: workspace:*
-        version: link:../custom-code-quality-tools
+        version: link:../eslint-config-custom
       jest:
         specifier: ^27.5.1
         version: 27.5.1
@@ -799,6 +805,11 @@ packages:
   /@next/env@13.4.1:
     resolution: {integrity: sha512-eD6WCBMFjLFooLM19SIhSkWBHtaFrZFfg2Cxnyl3vS3DAdFRfnx5TY2RxlkuKXdIRCC0ySbtK9JXXt8qLCqzZg==}
     dev: false
+
+  /@next/eslint-plugin-next@13.4.19:
+    resolution: {integrity: sha512-N/O+zGb6wZQdwu6atMZHbR7T9Np5SUFUjZqCbj0sXm+MwQO35M8TazVB4otm87GkXYs2l6OPwARd3/PUWhZBVQ==}
+    dependencies:
+      glob: 7.1.7
 
   /@next/swc-darwin-arm64@13.4.1:
     resolution: {integrity: sha512-eF8ARHtYfnoYtDa6xFHriUKA/Mfj/cCbmKb3NofeKhMccs65G6/loZ15a6wYCCx4rPAd6x4t1WmVYtri7EdeBg==}
@@ -2484,6 +2495,16 @@ packages:
     dependencies:
       is-glob: 4.0.3
     dev: false
+
+  /glob@7.1.7:
+    resolution: {integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==}
+    dependencies:
+      fs.realpath: 1.0.0
+      inflight: 1.0.6
+      inherits: 2.0.4
+      minimatch: 3.1.2
+      once: 1.4.0
+      path-is-absolute: 1.0.1
 
   /glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
