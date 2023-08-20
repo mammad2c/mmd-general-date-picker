@@ -6,7 +6,7 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "pre-commit": "lint-staged",
-    "format": "prettier --write \"**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,css,scss,md,json,html}\"",
+    "format": "prettier --write **/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,css,scss,md,json,html} ",
     "prepare": "node scripts/prepare.mjs"
   },
   "devDependencies": {
