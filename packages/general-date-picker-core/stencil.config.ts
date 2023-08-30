@@ -1,24 +1,25 @@
-import { Config } from '@stencil/core';
+import { Config } from "@stencil/core";
 
 export const config: Config = {
-  namespace: 'general-date-picker-core',
+  namespace: "general-date-picker-core",
   outputTargets: [
     {
-      type: 'dist',
-      esmLoaderPath: '../loader',
+      type: "dist",
+      esmLoaderPath: "../loader",
     },
     {
-      type: 'dist-custom-elements',
+      type: "dist-custom-elements",
     },
     {
-      type: 'docs-readme',
+      type: "docs-readme",
+      strict: true,
     },
     {
-      type: 'www',
+      type: "www",
       serviceWorker: null, // disable service workers
     },
   ],
   testing: {
-    browserHeadless: 'new',
+    browserHeadless: "new",
   },
 };

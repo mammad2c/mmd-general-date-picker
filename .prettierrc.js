@@ -1,12 +1,12 @@
 module.exports = {
-  arrowParens: 'avoid',
+  arrowParens: "avoid",
   bracketSpacing: true,
   bracketSameLine: false,
-  quoteProps: 'consistent',
+  quoteProps: "consistent",
   printWidth: 180,
   semi: true,
-  singleQuote: true,
+  singleQuote: false,
   tabWidth: 2,
-  trailingComma: 'all',
+  trailingComma: "all",
   useTabs: false,
 };

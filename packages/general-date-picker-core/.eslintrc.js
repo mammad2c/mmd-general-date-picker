@@ -1,11 +1,11 @@
 module.exports = {
   root: true,
-  extends: ['custom'],
+  extends: ["custom"],
   rules: {
-    '@typescript-eslint/no-unused-vars': [
-      'error',
+    "@typescript-eslint/no-unused-vars": [
+      "error",
       {
-        varsIgnorePattern: '^h$',
+        varsIgnorePattern: "^h$",
       },
     ],
   },
