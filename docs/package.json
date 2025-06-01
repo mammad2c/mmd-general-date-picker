@@ -7,7 +7,7 @@
     "serve": "vitepress serve src"
   },
   "dependencies": {
-    "vitepress": "^1.1.0",
+    "vitepress": "^1.6.3",
     "mmd-general-date-picker": "workspace:*"
   }
 }
