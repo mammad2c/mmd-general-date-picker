@@ -13,8 +13,8 @@
     "yarn": "please use pnpm"
   },
   "scripts": {
-    "build": "turbo run build --filter=...",
-    "dev": "turbo run dev --parallel --filter=...",
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
     "format": "prettier \"**/*.{ts,tsx,js,jsx,json,md}\" --check",
     "format:write": "prettier \"**/*.{ts,tsx,js,jsx,json,md}\" --write",
@@ -25,7 +25,7 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,md,css}": [
       "prettier --write",
-      "eslint --cache --fix"
+      "eslint --fix"
     ]
   },
   "config": {

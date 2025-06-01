@@ -2,7 +2,7 @@
   "name": "docs",
   "private": true,
   "scripts": {
-    "dev": "vitepress dev src",
+    "dev": "vitepress dev src --port 8080",
     "build": "vitepress build src",
     "serve": "vitepress serve src"
   },
