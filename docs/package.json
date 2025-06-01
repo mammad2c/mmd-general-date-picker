@@ -1,0 +1,13 @@
+{
+  "name": "docs",
+  "private": true,
+  "scripts": {
+    "dev": "vitepress dev src",
+    "build": "vitepress build src",
+    "serve": "vitepress serve src"
+  },
+  "dependencies": {
+    "vitepress": "^1.1.0",
+    "mmd-general-date-picker": "workspace:*"
+  }
+}
