@@ -1,3 +1,5 @@
 import MmdGeneralDatePicker from "./src/index";
 
-new MmdGeneralDatePicker();
+new MmdGeneralDatePicker({
+  element: document.querySelector("#app") as HTMLElement,
+});
