@@ -1,3 +1,3 @@
-import GeneralDatePicker from "./src/index";
+import MmdGeneralDatePicker from "./src/index";
 
-new GeneralDatePicker();
+new MmdGeneralDatePicker();

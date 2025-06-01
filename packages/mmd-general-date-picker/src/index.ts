@@ -1,7 +1,7 @@
-class GeneralDatePicker {
+class MmdGeneralDatePicker {
   constructor() {
     console.log("Hello from GeneralDatePicker!");
   }
 }
 
-export default GeneralDatePicker;
+export default MmdGeneralDatePicker;
