@@ -1,4 +1,5 @@
-import type { AstNode, ComponentCtor, TemplateResult } from "./engine";
+import type Component from "./component";
+import type { AstNode, TemplateResult } from "./engine";
 import { visitNode } from "./visit-node";
 
 /**
@@ -22,10 +23,10 @@ export function createASTNodes<CTX extends Record<string, unknown>>(
   ctx: CTX,
 ): AstNode[] {
   /** 1. component map: explicit arg wins */
-  const compsInput: Record<string, ComponentCtor> =
-    (ctx?.components as Record<string, ComponentCtor>) ?? {};
+  const compsInput: Record<string, typeof Component> =
+    (ctx?.components as Record<string, typeof Component>) ?? {};
 
-  const comps: Record<string, ComponentCtor> = {};
+  const comps: Record<string, typeof Component> = {};
 
   for (const k in compsInput) comps[k.toLowerCase()] = compsInput[k];
 

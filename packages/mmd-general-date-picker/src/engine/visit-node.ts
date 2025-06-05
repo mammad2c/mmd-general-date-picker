@@ -1,5 +1,6 @@
 import { assert } from "@/utils/assert";
-import type { AstNode, Attrs, ComponentCtor, Events, TemplateResult } from "./engine";
+import type { AstNode, Attrs, Events, TemplateResult } from "./engine";
+import type Component from "./component";
 
 function valueOf(values: unknown[], value: string) {
   const markerRE = /^__P(\d+)__$/;
@@ -33,7 +34,7 @@ export function visitNode(
   }: {
     template: TemplateResult;
     ctx: Record<string, unknown>;
-    comps: Record<string, ComponentCtor>;
+    comps: Record<string, typeof Component>;
   },
 ): AstNode | null {
   const { values } = template;

@@ -1,10 +1,8 @@
+import type Component from "./component";
+
 export type Attrs = Record<string, string>;
 
 export type Events = Record<string, (e: Event) => void>;
-
-export interface ComponentCtor {
-  new (props?: Record<string, unknown>): { render(): Node };
-}
 
 export interface TemplateResult {
   raw: string; // HTML with markers like __P0__
@@ -26,7 +24,7 @@ export interface ElementNode {
 
 export interface ComponentNode {
   type: "component";
-  ctor: ComponentCtor;
+  ctor: typeof Component;
   props: Record<string, unknown>;
 }
 
