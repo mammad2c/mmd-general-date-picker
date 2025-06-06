@@ -3,6 +3,7 @@ import type { html } from "./html";
 import { createASTNodes } from "./create-ast-nodes";
 import { render } from "./render";
 import eventBus from "./event-bus";
+import { memory } from "./memory";
 
 type TProps = Record<string, unknown>;
 
@@ -12,23 +13,33 @@ function generateId() {
   return Math.random().toString(16).slice(2) + Date.now().toString(16);
 }
 
-const states: Record<string, unknown> = {};
-
 export default class Component<Props = TProps, State = TState> {
   [key: string]: unknown; // Allow dynamic properties
 
-  private _hiddenState: State;
+  private _hiddenState = {} as State;
 
   props: Props;
 
-  private id: string;
+  id: string;
 
   get state() {
-    return this._hiddenState;
+    return this._hiddenState as State;
   }
 
   set state(state: State) {
-    this._hiddenState = state;
+    const newState = new Proxy(state as object, {
+      set: (target, prop, value) => {
+        if (typeof prop === "string") {
+          (target as Record<string, unknown>)[prop] = value;
+          this.update();
+          return true;
+        }
+
+        return false;
+      },
+    }) as State;
+
+    this._hiddenState = newState;
     this.update();
   }
 
@@ -39,25 +50,18 @@ export default class Component<Props = TProps, State = TState> {
 
     this.id = id;
 
-    const memoryState = states[this.id];
+    const memoryState = memory.memoryStates[this.id] as State;
 
-    this._hiddenState =
+    this.state =
       memoryState ??
-      new Proxy(
-        typeof initialState === "function" ? initialState() : initialState || ({} as State),
-        {
-          set: (target, prop, value) => {
-            target[prop as keyof typeof target] = value;
-            this.update();
-            return true;
-          },
-        },
-      );
+      (typeof initialState === "function"
+        ? (initialState as () => State)()
+        : initialState || ({} as State));
   }
 
   setState(newState: Partial<State> | ((prevState: State) => Partial<State>)) {
-    const updatedState = typeof newState === "function" ? newState(this.state) : newState;
-    Object.assign(this.state as object, updatedState);
+    const updatedState = typeof newState === "function" ? newState(this.state as State) : newState;
+    this.state = { ...(this.state as object), ...updatedState } as State;
   }
 
   template(): ReturnType<typeof html> {
@@ -65,17 +69,24 @@ export default class Component<Props = TProps, State = TState> {
     assert(false, "Template method must be implemented in subclass");
   }
 
-  render(): Node {
-    const ast = createASTNodes(this.template(), this); // keeps real function reference
+  render(): Element | Node {
+    const ast = createASTNodes(this.template(), this)[0]; // keeps real function reference
 
-    const result = render(ast[0]);
+    const result = render(ast);
+
+    memory.parsedComponents[this.id] = {
+      id: "id" in ast ? ast.id : undefined,
+      parentId: "parentId" in ast ? ast.parentId : undefined,
+      element: result,
+      component: this,
+    };
 
     return result;
   }
 
   private update() {
     // Update logic goes here
-    states[this.id] = this.state;
+    memory.memoryStates[this.id] = this.state;
     eventBus.emit("component-updated", this);
   }
 

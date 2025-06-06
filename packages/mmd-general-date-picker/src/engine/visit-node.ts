@@ -62,6 +62,7 @@ export function visitNode(
 
     /* 3-a. Registered component? */
     const Ctor = comps[tagName];
+
     if (Ctor) {
       const props: Record<string, unknown> = {};
       for (const { name, value } of arrayAttrs) {
@@ -112,6 +113,8 @@ export function visitNode(
       tag: tagName as keyof HTMLElementTagNameMap,
       attrs: Object.keys(attrs).length ? attrs : undefined,
       on: Object.keys(on).length ? on : undefined,
+      id: ctx.id as string,
+      parentId: ctx.parentId as string,
       children: Array.from(el.childNodes).reduce((acc, child) => {
         const visitedNode = visitNode(child, { template, ctx, comps });
 

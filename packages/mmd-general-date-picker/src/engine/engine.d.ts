@@ -20,6 +20,8 @@ export interface ElementNode {
   attrs?: Attrs;
   on?: Events;
   children: AstNode[];
+  id?: string | null;
+  parentId?: string | null;
 }
 
 export interface ComponentNode {
@@ -29,3 +31,5 @@ export interface ComponentNode {
 }
 
 export type AstNode = TextNode | ElementNode | ComponentNode;
+
+export type ComponentInstance = InstanceType<typeof Component<unknown, unknown>>;

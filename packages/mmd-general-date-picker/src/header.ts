@@ -5,24 +5,8 @@ type HeaderProps = {
   title: string;
 };
 
-type HeaderState = {
-  mammad: string;
-};
-
-export default class Header extends Component<HeaderProps, HeaderState> {
-  click() {
-    // this.setState({
-    //   mammad: "new mammad",
-    // });
-    this.state.mammad = "new mammad";
-  }
-
+export default class Header extends Component<HeaderProps> {
   template() {
-    return html`
-      <header class="mmd-header">
-        ${this.props.title} ${this.state.mammad}
-        <button @click=${this.click}>Click Me</button>
-      </header>
-    `;
+    return html` <header class="mmd-header">${this.props.title}</header> `;
   }
 }
