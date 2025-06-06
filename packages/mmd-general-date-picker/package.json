@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "build:e2e": "tsc && vite build --outDir e2e/dist",
-    "test:unit": "vitest run --reporter verbose",
+    "test:unit": "vitest run --coverage",
     "test:unit:watch": "vitest --watch",
     "test:e2e": "playwright test",
     "serve:e2e": "serve e2e"
@@ -17,6 +17,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.15.30",
+    "@vitest/coverage-istanbul": "^3.2.2",
     "jsdom": "^26.1.0",
     "serve": "^14.2.4",
     "typescript": "~5.8.3",

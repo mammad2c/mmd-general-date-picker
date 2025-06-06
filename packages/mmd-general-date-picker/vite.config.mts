@@ -18,10 +18,10 @@ export default defineConfig({
     environment: "jsdom",
     exclude: ["**/node_modules/**", "**/dist/**", "**/e2e/**"],
     coverage: {
-      provider: "v8",
+      provider: "istanbul",
       reporter: ["text", "json", "html"],
       include: ["src/**/*.{ts,tsx}"],
-      exclude: ["src/**/*.spec.ts", "src/**/*.test.ts"],
+      exclude: ["src/**/*.spec.ts", "src/**/*.test.ts", "src/tests/**/*", "src/playground.ts"],
     },
   },
 });
