@@ -62,6 +62,71 @@ describe("Engine", () => {
 
       expect(getByText("Child Component")).toBeTruthy();
     });
+
+    it("should render a child component multiple times correctly", () => {
+      class ChildComponent extends Component {
+        template() {
+          return html`<span>Child Component</span>`;
+        }
+      }
+
+      class TestComponent extends Component {
+        get components() {
+          return {
+            ChildComponent,
+          };
+        }
+        template() {
+          return html`<div>
+            <ChildComponent></ChildComponent>
+
+            <div>Space</div>
+            <ChildComponent></ChildComponent>
+
+            <div>Space</div>
+            <ChildComponent></ChildComponent>
+          </div>`;
+        }
+      }
+
+      const { getAllByText } = renderComponent(TestComponent);
+
+      expect(getAllByText("Child Component").length).toBe(3);
+    });
+
+    it("should render different children components correctly", () => {
+      class ChildComponent1 extends Component {
+        template() {
+          return html`<span>Child Component 1</span>`;
+        }
+      }
+
+      class ChildComponent2 extends Component {
+        template() {
+          return html`<span>Child Component 2</span>`;
+        }
+      }
+
+      class TestComponent extends Component {
+        get components() {
+          return {
+            ChildComponent1,
+            ChildComponent2,
+          };
+        }
+        template() {
+          return html`<div>
+            <ChildComponent1></ChildComponent1>
+            <ChildComponent2></ChildComponent2>
+          </div>`;
+        }
+      }
+
+      const { getByText } = renderComponent(TestComponent);
+
+      expect(getByText("Child Component 1")).toBeTruthy();
+      expect(getByText("Child Component 2")).toBeTruthy();
+    });
   });
 
   describe("Attributes", () => {
@@ -197,6 +262,31 @@ describe("Engine", () => {
   });
 
   describe("State and Props", () => {
+    it("should render a child component with props correctly", () => {
+      class ChildComponent extends Component {
+        template() {
+          return html`<span>Count: ${this.props.count}</span>`;
+        }
+      }
+
+      class TestComponent extends Component {
+        get components() {
+          return {
+            ChildComponent,
+          };
+        }
+        template() {
+          return html`<div>
+            <ChildComponent count=${1}></ChildComponent>
+          </div>`;
+        }
+      }
+
+      const { getByText } = renderComponent(TestComponent);
+
+      expect(getByText("Count: 1")).toBeTruthy();
+    });
+
     it("should update the component by setState", async () => {
       type TestComponentState = {
         count: number;
