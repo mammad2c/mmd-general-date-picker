@@ -424,4 +424,41 @@ describe("Engine", () => {
       expect(getByText("Count: 1")).toBeTruthy();
     });
   });
+
+  describe("Conditional Rendering", () => {
+    it("should handle condition with #if", async () => {
+      class TestComponent extends Component<
+        undefined,
+        {
+          show: boolean;
+        }
+      > {
+        constructor() {
+          super();
+          this.state = { show: false };
+        }
+
+        toggleShow() {
+          this.state.show = !this.state.show;
+        }
+
+        template() {
+          return html`<div class="test-component">
+            <span #if=${this.state.show}>Show</span>
+            <button @click="toggleShow">Toggle</button>
+          </div>`;
+        }
+      }
+
+      const { queryByText, getByText, user } = renderComponent(TestComponent);
+
+      expect(queryByText("Show")).not.toBeTruthy();
+
+      const toggleBtn = getByText("Toggle");
+
+      await user.click(toggleBtn);
+
+      expect(queryByText("Show")).toBeTruthy();
+    });
+  });
 });

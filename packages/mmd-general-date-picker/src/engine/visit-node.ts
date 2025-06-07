@@ -105,6 +105,14 @@ export function visitNode(
         continue;
       }
 
+      if (name.startsWith("#")) {
+        if (!real) {
+          return null;
+        }
+
+        continue;
+      }
+
       attrs[name] = String(real);
     }
 

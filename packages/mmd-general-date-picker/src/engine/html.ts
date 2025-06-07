@@ -6,9 +6,9 @@ import type { TemplateResult } from "./engine";
  * @remarks
  *
  * This is a tagged template literal function that takes a string array and any
- * number of value arguments. It returns an object with a {@link TemplateResult.raw}
+ * number of value arguments. It returns an object with a {@link typeof TemplateResult.raw}
  * property that contains the original string array with values interpolated at
- * their original positions. The values are stored in the {@link TemplateResult.values}
+ * their original positions. The values are stored in the {@link typeof TemplateResult.values}
  * property.
  *
  * @example
@@ -26,5 +26,10 @@ export function html(strings: TemplateStringsArray, ...values: unknown[]): Templ
     "",
   );
 
-  return { raw, values };
+  const templateResult: TemplateResult = {
+    raw,
+    values,
+  };
+
+  return templateResult;
 }
