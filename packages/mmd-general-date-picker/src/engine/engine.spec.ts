@@ -127,6 +127,28 @@ describe("Engine", () => {
       expect(getByText("Child Component 1")).toBeTruthy();
       expect(getByText("Child Component 2")).toBeTruthy();
     });
+
+    it("should render nested html tag function correctly", () => {
+      class TestComponent extends Component {
+        template() {
+          return html`<div>
+            ${html`<span class="child-1">Child 1</span>`}
+            ${html`<span class="child-2">
+              Child 2 ${html`<span class="child-3">Child 3</span>`}
+            </span>`}
+          </div>`;
+        }
+      }
+
+      const { getByText, container } = renderComponent(TestComponent);
+
+      expect(getByText("Child 1")).toBeTruthy();
+      expect(getByText("Child 2")).toBeTruthy();
+      expect(getByText("Child 3")).toBeTruthy();
+      expect(container.querySelectorAll(".child-1").length).toBe(1);
+      expect(container.querySelectorAll(".child-2").length).toBe(1);
+      expect(container.querySelectorAll(".child-3").length).toBe(1);
+    });
   });
 
   describe("Attributes", () => {
@@ -480,6 +502,146 @@ describe("Engine", () => {
         template() {
           return html`<div class="test-component">
             <span>${this.state.show ? "Show" : "Hide"}</span>
+            <button @click="toggleShow">Toggle</button>
+          </div>`;
+        }
+      }
+
+      const { queryByText, getByText, user } = renderComponent(TestComponent);
+
+      expect(queryByText("Show")).not.toBeTruthy();
+
+      const toggleBtn = getByText("Toggle");
+
+      await user.click(toggleBtn);
+
+      expect(queryByText("Show")).toBeTruthy();
+    });
+
+    it("should handle conditional rendering by && operator", async () => {
+      class TestComponent extends Component<
+        undefined,
+        {
+          show: boolean;
+        }
+      > {
+        constructor() {
+          super();
+          this.state = { show: false };
+        }
+
+        toggleShow() {
+          this.state.show = !this.state.show;
+        }
+
+        template() {
+          return html`<div class="test-component">
+            <span>${this.state.show && "Show"}</span>
+            <button @click="toggleShow">Toggle</button>
+          </div>`;
+        }
+      }
+
+      const { queryByText, getByText, user } = renderComponent(TestComponent);
+
+      expect(queryByText("Show")).not.toBeTruthy();
+
+      const toggleBtn = getByText("Toggle");
+
+      await user.click(toggleBtn);
+
+      expect(queryByText("Show")).toBeTruthy();
+    });
+
+    it("should handle conditional rendering by || operator", async () => {
+      class TestComponent extends Component<
+        undefined,
+        {
+          show: boolean;
+        }
+      > {
+        constructor() {
+          super();
+          this.state = { show: false };
+        }
+
+        toggleShow() {
+          this.state.show = !this.state.show;
+        }
+
+        template() {
+          return html`<div class="test-component">
+            <span>${this.state.show || "Show"}</span>
+            <button @click="toggleShow">Toggle</button>
+          </div>`;
+        }
+      }
+
+      const { queryByText, getByText, user } = renderComponent(TestComponent);
+
+      expect(queryByText("Show")).toBeTruthy();
+
+      const toggleBtn = getByText("Toggle");
+
+      await user.click(toggleBtn);
+
+      expect(queryByText("Show")).not.toBeTruthy();
+    });
+
+    it("should handle conditional rendering by ?? operator", async () => {
+      class TestComponent extends Component<
+        undefined,
+        {
+          show: boolean | null;
+        }
+      > {
+        constructor() {
+          super();
+          this.state = { show: null };
+        }
+
+        toggleShow() {
+          this.state.show = !this.state.show;
+        }
+
+        template() {
+          return html`<div class="test-component">
+            <span>${this.state.show ?? "Show"}</span>
+            <button @click="toggleShow">Toggle</button>
+          </div>`;
+        }
+      }
+
+      const { queryByText, getByText, user } = renderComponent(TestComponent);
+
+      expect(queryByText("Show")).toBeTruthy();
+
+      const toggleBtn = getByText("Toggle");
+
+      await user.click(toggleBtn);
+
+      expect(queryByText("Show")).not.toBeTruthy();
+    });
+
+    it("should handle conditional rendering by inside html", async () => {
+      class TestComponent extends Component<
+        undefined,
+        {
+          show: boolean;
+        }
+      > {
+        constructor() {
+          super();
+          this.state = { show: false };
+        }
+
+        toggleShow() {
+          this.state.show = !this.state.show;
+        }
+
+        template() {
+          return html`<div class="test-component">
+            ${this.state.show ? html`<span>Show</span>` : html`<span>Hide</span>`}
             <button @click="toggleShow">Toggle</button>
           </div>`;
         }

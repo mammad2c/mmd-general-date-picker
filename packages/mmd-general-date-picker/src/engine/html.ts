@@ -18,18 +18,35 @@ import type { TemplateResult } from "./engine";
  * result.values // ['John']
  *
  * */
+
 export function html(strings: TemplateStringsArray, ...values: unknown[]): TemplateResult {
-  const valuesLength = values.length;
+  let rawOut = "";
+  const valuesOut: unknown[] = [];
 
-  const raw = strings.reduce(
-    (out, part, i) => out + part + (i < valuesLength ? `__P${i}__` : ""),
-    "",
-  );
+  strings.forEach((chunk, i) => {
+    rawOut += chunk;
 
-  const templateResult: TemplateResult = {
-    raw,
-    values,
-  };
+    if (i >= values.length) return; // last literal – done
+    const v = values[i];
+
+    /* ── 1. nested template?  splice it in ────────────────────────────── */
+    if (v && typeof v === "object" && "raw" in v && "values" in v) {
+      const nested = v as TemplateResult;
+
+      // Re-index the nested markers so they continue after current ones
+      const offset = valuesOut.length;
+      const nestedRaw = nested.raw.replace(/__P(\d+)__/g, (_, n) => `__P${+n + offset}__`);
+
+      rawOut += nestedRaw;
+      valuesOut.push(...nested.values);
+    } else {
+      /* ── 2. ordinary placeholder ─────────────────────────────────────── */
+      rawOut += `__P${valuesOut.length}__`;
+      valuesOut.push(v);
+    }
+  });
+
+  const templateResult = { raw: rawOut, values: valuesOut };
 
   return templateResult;
 }
