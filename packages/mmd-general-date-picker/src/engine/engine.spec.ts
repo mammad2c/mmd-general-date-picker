@@ -426,7 +426,7 @@ describe("Engine", () => {
   });
 
   describe("Conditional Rendering", () => {
-    it("should handle condition with #if", async () => {
+    it("should handle conditional rendering by #if", async () => {
       class TestComponent extends Component<
         undefined,
         {
@@ -445,6 +445,41 @@ describe("Engine", () => {
         template() {
           return html`<div class="test-component">
             <span #if=${this.state.show}>Show</span>
+            <button @click="toggleShow">Toggle</button>
+          </div>`;
+        }
+      }
+
+      const { queryByText, getByText, user } = renderComponent(TestComponent);
+
+      expect(queryByText("Show")).not.toBeTruthy();
+
+      const toggleBtn = getByText("Toggle");
+
+      await user.click(toggleBtn);
+
+      expect(queryByText("Show")).toBeTruthy();
+    });
+
+    it("should handle conditional rendering by ternary operator", async () => {
+      class TestComponent extends Component<
+        undefined,
+        {
+          show: boolean;
+        }
+      > {
+        constructor() {
+          super();
+          this.state = { show: false };
+        }
+
+        toggleShow() {
+          this.state.show = !this.state.show;
+        }
+
+        template() {
+          return html`<div class="test-component">
+            <span>${this.state.show ? "Show" : "Hide"}</span>
             <button @click="toggleShow">Toggle</button>
           </div>`;
         }
