@@ -30,6 +30,6 @@ export interface ComponentNode {
   props: Record<string, unknown>;
 }
 
-export type AstNode = TextNode | ElementNode | ComponentNode;
+export type ASTNode = TextNode | ElementNode | ComponentNode;
 
 export type ComponentInstance = InstanceType<typeof Component<unknown, unknown>>;

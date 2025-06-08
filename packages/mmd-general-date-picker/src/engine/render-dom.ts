@@ -7,7 +7,9 @@ export function renderDOM(instance: ComponentInstance, element: Element) {
     element.removeChild(element!.firstChild); // Clear previous content if any
   }
 
-  element.appendChild(instance.render());
+  const result = instance.render();
+
+  element.appendChild(result);
 
   eventBus.on("component-updated", updateDOM);
 }

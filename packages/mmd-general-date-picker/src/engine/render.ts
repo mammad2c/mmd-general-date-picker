@@ -1,6 +1,6 @@
-import type { AstNode } from "./engine";
+import type { ASTNode } from "./engine";
 
-export function render(node: AstNode, parentId?: string | null): Element | Node {
+export function render(node: ASTNode, parentId?: string | null): Element | Node {
   /* text */
   if (node.type === "text") return document.createTextNode(node.value);
 

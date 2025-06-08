@@ -1,27 +1,24 @@
 import type Component from "./component";
-import type { AstNode, TemplateResult } from "./engine";
+import type { ASTNode, TemplateResult } from "./engine";
 import { visitNode } from "./visit-node";
 
 /**
- * Parse a TemplateResult into an array of AST nodes.
+ * Convert a TemplateResult into an array of AST nodes.
  *
  * @param tpl The TemplateResult to parse.
  * @param ctx The context object that contains any components referenced in the
  *            template literal.
- * @param components Optional explicit mapping of component names to
- *                   constructors. If not given, the `components` property of
- *                   `ctx` is used.
  *
  * @returns An array of AST nodes.
  *
  * @example
  * const result = html`<div>Hello, ${name}!</div>`;
- * parse(result); // [{ type: "text", value: "Hello, " }, { type: "text", value: name }, { type: "text", value: "!" }]
+ * createASTNodes(result); // [{ type: "text", value: "Hello, " }, { type: "text", value: name }, { type: "text", value: "!" }]
  */
 export function createASTNodes<CTX extends Record<string, unknown>>(
   tpl: TemplateResult,
   ctx: CTX,
-): AstNode[] {
+): ASTNode[] {
   /** 1. component map: explicit arg wins */
   const compsInput: Record<string, typeof Component> =
     (ctx?.components as Record<string, typeof Component>) ?? {};
@@ -35,7 +32,7 @@ export function createASTNodes<CTX extends Record<string, unknown>>(
   host.innerHTML = tpl.raw.trim();
 
   /** 3. recursive walk */
-  return Array.from(host.content.childNodes).reduce((acc, child) => {
+  return Array.from(host.content.childNodes).reduce<ASTNode[]>((acc, child) => {
     const visitedNode = visitNode(child, {
       template: tpl,
       ctx,
@@ -47,5 +44,5 @@ export function createASTNodes<CTX extends Record<string, unknown>>(
     }
 
     return acc;
-  }, [] as AstNode[]);
+  }, []);
 }

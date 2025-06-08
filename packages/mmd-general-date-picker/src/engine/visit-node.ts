@@ -1,5 +1,5 @@
 import { assert } from "@/utils/assert";
-import type { AstNode, Attrs, Events, TemplateResult } from "./engine";
+import type { ASTNode, Attrs, Events, TemplateResult } from "./engine";
 import type Component from "./component";
 
 function valueOf(values: unknown[], value: string) {
@@ -36,7 +36,7 @@ export function visitNode(
     ctx: Record<string, unknown>;
     comps: Record<string, typeof Component>;
   },
-): AstNode | null {
+): ASTNode | null {
   const { values } = template;
 
   /* ── text node ─────────────────────────────────────────────────────── */
@@ -77,7 +77,7 @@ export function visitNode(
 
     assert(
       !(probe instanceof HTMLUnknownElement),
-      `Unknown component <${el.tagName}>. ` + `Add it to this.components or pass it in parse().`,
+      `Unknown component <${el.tagName}>. ` + `Add it to this.components.`,
     );
 
     for (const { name, value } of arrayAttrs) {
@@ -123,7 +123,7 @@ export function visitNode(
       on: Object.keys(on).length ? on : undefined,
       id: ctx.id as string,
       parentId: ctx.parentId as string,
-      children: Array.from(el.childNodes).reduce((acc, child) => {
+      children: Array.from(el.childNodes).reduce<ASTNode[]>((acc, child) => {
         const visitedNode = visitNode(child, { template, ctx, comps });
 
         if (visitedNode) {
@@ -131,7 +131,7 @@ export function visitNode(
         }
 
         return acc;
-      }, [] as AstNode[]),
+      }, []),
     };
   }
 
