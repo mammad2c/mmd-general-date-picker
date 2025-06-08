@@ -70,9 +70,31 @@ export function visitNode(
 
     if (Ctor) {
       const props: Record<string, unknown> = {};
+
       for (const { name, value } of arrayAttrs) {
-        if (name.startsWith(":")) props[name.slice(1)] = valueOf(values, value);
-        else if (!name.startsWith("@")) props[name] = valueOf(values, value);
+        const nameStartsWith = name.charAt(0);
+
+        switch (nameStartsWith) {
+          case ":":
+            props[name.slice(1)] = valueOf(values, value);
+            break;
+
+          case "#": {
+            const condition = valueOf(values, value);
+
+            if (!condition) {
+              return null;
+            }
+
+            break;
+          }
+
+          default:
+            if (nameStartsWith !== "@") {
+              props[name] = valueOf(values, value);
+            }
+            break;
+        }
       }
       return { type: "component", ctor: Ctor, props };
     }
