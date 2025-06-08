@@ -8,7 +8,7 @@ import { memory } from "@/engine/memory";
 function cleanup() {
   document.body.innerHTML = "";
   memory.parsedComponents = {};
-  memory.memoryStates = {};
+  memory.VDOM = {};
 }
 
 beforeAll(() => {

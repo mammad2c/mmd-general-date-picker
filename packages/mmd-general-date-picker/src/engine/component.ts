@@ -20,6 +20,8 @@ export default class Component<Props = TProps, State = TState> {
 
   private isMounted = false;
 
+  public onUnmount?: () => void;
+
   props: Props;
 
   id: string;
@@ -52,7 +54,7 @@ export default class Component<Props = TProps, State = TState> {
 
     this.id = id;
 
-    const memoryState = memory.memoryStates[this.id] as State;
+    const memoryState = memory.parsedComponents[id]?.state as State | undefined; // memory.memoryStates[this.id] as State;
 
     this.state =
       memoryState ??
@@ -71,17 +73,20 @@ export default class Component<Props = TProps, State = TState> {
     assert(false, "Template method must be implemented in subclass");
   }
 
-  render(): Element | Node {
+  render(): ReturnType<typeof render> {
     const ast = createASTNodes(this.template(), this)[0]; // keeps real function reference
 
     const result = render(ast);
 
-    memory.parsedComponents[this.id] = {
+    const parsedComponent = {
       id: "id" in ast ? ast.id : undefined,
       parentId: "parentId" in ast ? ast.parentId : undefined,
-      element: result,
+      element: result.el,
       component: this,
+      state: this.state,
     };
+
+    memory.parsedComponents[this.id] = parsedComponent;
 
     if (!this.isMounted) {
       this.isMounted = true;
@@ -92,16 +97,19 @@ export default class Component<Props = TProps, State = TState> {
 
   private update() {
     // Update logic goes here
-    memory.memoryStates[this.id] = this.state;
 
     if (!this.isMounted) {
       return;
     }
 
-    eventBus.emit("component-updated", this);
-  }
+    const parsedComponent = memory.parsedComponents[this.id];
 
-  destroy() {
-    // Cleanup logic goes here
+    if (!parsedComponent) {
+      return;
+    }
+
+    parsedComponent.state = this.state;
+
+    eventBus.emit("component-updated", this);
   }
 }

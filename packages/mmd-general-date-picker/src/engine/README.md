@@ -125,7 +125,7 @@ Hook When
 - template() Return a TemplateResult
 - render() Inherited: calls template → parse → render
 - update() Swap DOM in place after state change
-- destroy() Remove DOM + drop refs
+- onUnmounted() Remove DOM + drop refs
 
 ⸻
 
@@ -141,9 +141,9 @@ Hook When
 
 🗺 Roadmap:
 
-- add onMounted
-- add onUpdated
-- add onDestroyed
+- add onMounted // done
+- add onUpdated // done
+- add onUnmounted // done
 
 Contributions welcome—feel free to open issues or PRs!
 

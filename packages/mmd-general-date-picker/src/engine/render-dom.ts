@@ -1,5 +1,6 @@
 import type { ComponentInstance } from "./engine";
 import eventBus from "./event-bus";
+import { memory } from "./memory";
 import { updateDOM } from "./update-dom";
 
 export function renderDOM(instance: ComponentInstance, element: Element) {
@@ -9,7 +10,9 @@ export function renderDOM(instance: ComponentInstance, element: Element) {
 
   const result = instance.render();
 
-  element.appendChild(result);
+  memory.VDOM = result;
+
+  element.appendChild(result.el);
 
   eventBus.on("component-updated", updateDOM);
 }
