@@ -1,5 +1,5 @@
 import { assert } from "@/utils/assert";
-import type { ASTNode, Attrs, Events, TemplateResult } from "./engine";
+import type { ASTNode, Attrs, ComponentInstance, Events, TemplateResult } from "./engine";
 import type Component from "./component";
 
 function valueOf(values: unknown[], value: string) {
@@ -30,14 +30,19 @@ export function visitNode(
   {
     template,
     ctx,
-    comps,
   }: {
     template: TemplateResult;
-    ctx: Record<string, unknown>;
-    comps: Record<string, typeof Component>;
+    ctx: ComponentInstance;
   },
 ): ASTNode | null {
   const { values } = template;
+
+  const rawComps: Record<string, typeof Component> =
+    (ctx?.components as Record<string, typeof Component>) ?? {};
+
+  const comps: Record<string, typeof Component> = {};
+
+  for (const k in rawComps) comps[k.toLowerCase()] = rawComps[k];
 
   /* ── text node ─────────────────────────────────────────────────────── */
   if (node.nodeType === Node.TEXT_NODE) {
@@ -124,7 +129,7 @@ export function visitNode(
       id: ctx.id as string,
       parentId: ctx.parentId as string,
       children: Array.from(el.childNodes).reduce<ASTNode[]>((acc, child) => {
-        const visitedNode = visitNode(child, { template, ctx, comps });
+        const visitedNode = visitNode(child, { template, ctx });
 
         if (visitedNode) {
           acc.push(visitedNode);
