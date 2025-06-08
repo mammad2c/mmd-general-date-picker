@@ -12,9 +12,11 @@ export function render(node: ASTNode, parentId?: string | null): Element | Node 
   }
 
   /* element */
+  const frag = document.createDocumentFragment();
   const el = document.createElement(node.tag);
   if (node.attrs) for (const [k, v] of Object.entries(node.attrs)) el.setAttribute(k, v);
   if (node.on) for (const [e, fn] of Object.entries(node.on)) el.addEventListener(e, fn);
-  node.children.forEach((c) => el.appendChild(render(c, node.id)));
+  node.children.forEach((c) => frag.appendChild(render(c, node.id)));
+  el.appendChild(frag);
   return el;
 }
