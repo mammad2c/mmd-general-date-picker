@@ -18,6 +18,8 @@ export default class Component<Props = TProps, State = TState> {
 
   private _hiddenState = {} as State;
 
+  private isMounted = false;
+
   props: Props;
 
   id: string;
@@ -81,12 +83,21 @@ export default class Component<Props = TProps, State = TState> {
       component: this,
     };
 
+    if (!this.isMounted) {
+      this.isMounted = true;
+    }
+
     return result;
   }
 
   private update() {
     // Update logic goes here
     memory.memoryStates[this.id] = this.state;
+
+    if (!this.isMounted) {
+      return;
+    }
+
     eventBus.emit("component-updated", this);
   }
 
