@@ -18,9 +18,7 @@ export default class Component<Props = TProps, State = TState> {
 
   private _hiddenState = {} as State;
 
-  private isMounted = false;
-
-  public onUnmount?: () => void;
+  private isCompiled = false;
 
   props: Props;
 
@@ -88,8 +86,8 @@ export default class Component<Props = TProps, State = TState> {
 
     memory.parsedComponents[this.id] = parsedComponent;
 
-    if (!this.isMounted) {
-      this.isMounted = true;
+    if (!this.isCompiled) {
+      this.isCompiled = true;
     }
 
     return result;
@@ -98,7 +96,7 @@ export default class Component<Props = TProps, State = TState> {
   private update() {
     // Update logic goes here
 
-    if (!this.isMounted) {
+    if (!this.isCompiled) {
       return;
     }
 
@@ -112,4 +110,6 @@ export default class Component<Props = TProps, State = TState> {
 
     eventBus.emit("component-updated", this);
   }
+
+  public onUnmount() {}
 }

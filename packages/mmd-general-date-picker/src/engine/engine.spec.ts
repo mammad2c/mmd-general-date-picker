@@ -2,8 +2,15 @@ import { describe, expect, it, vi } from "vitest";
 import Component from "./component";
 import { html } from "./html";
 import { renderComponent } from "@/tests/render-component";
+import { memory } from "./memory";
+import { beforeEach } from "node:test";
 
 describe("Engine", () => {
+  beforeEach(() => {
+    memory.parsedComponents = {};
+    memory.VDOM = {};
+  });
+
   describe("Render", () => {
     it("should render component correctly", () => {
       class TestComponent extends Component {

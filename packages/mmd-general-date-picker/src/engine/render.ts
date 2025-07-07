@@ -21,11 +21,14 @@ export function render(node: ASTNode, parentId?: string | null): RenderResult {
   if (node.type === "component") {
     const inst = new node.ctor(node.props);
     inst.parentId = parentId;
-    // return inst.render();
+
+    const { el, children } = inst.render();
+
     return {
-      el: inst.render().el,
+      el,
       id: inst.id,
       component: inst,
+      children,
     };
   }
 

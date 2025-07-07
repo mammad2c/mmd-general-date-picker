@@ -5,6 +5,16 @@ type HeaderProps = {
   title: string;
 };
 
+class TitleComponent extends Component<{ title: string }> {
+  template() {
+    return html`<h1>${this.props.title}</h1>`;
+  }
+
+  onUnmount() {
+    console.log("TitleComponent is unmounted");
+  }
+}
+
 export default class Header extends Component<
   HeaderProps,
   {
@@ -18,6 +28,16 @@ export default class Header extends Component<
     };
   }
 
+  onUnmount() {
+    console.log("HeaderComponent is unmounted");
+  }
+
+  get components() {
+    return {
+      TitleComponent,
+    };
+  }
+
   toggle() {
     this.state.show = !this.state.show;
   }
@@ -25,7 +45,7 @@ export default class Header extends Component<
   template() {
     return html`
       <header class="mmd-header">
-        ${this.props.title}
+        <TitleComponent #if=${this.state.show} title=${this.props.title}></TitleComponent>
         <div>
           <button @click="toggle">Toggle</button>
         </div>
